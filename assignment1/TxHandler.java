@@ -1,4 +1,3 @@
-package assignment1;
 import java.util.ArrayList;
 import java.util.HashSet; 
 
@@ -43,14 +42,15 @@ public class TxHandler {
             }
             Transaction.Output output = currPool.getTxOutput(currUTXO); 
             inputSum += output.value; 
-            if (output.value < 0) {
-                return false; 
-            }
             if (!Crypto.verifySignature(output.address, tx.getRawDataToSign(i), input.signature)) {
                 return false; 
             }
+            claimedUTXO.add(currUTXO); 
         }
         for (Transaction.Output output: outputs) {
+            if (output.value < 0) {
+                return false; 
+            }
             outputSum += output.value; 
         }
         if (inputSum < outputSum) {
